@@ -1,0 +1,6 @@
+git config --global user.name SaraLeite018
+git config --global user.email saraleite2708@gmail.com
+
+dotnet new mvc -o Pokedex 
+
+Abrir terminal ctrl + '
