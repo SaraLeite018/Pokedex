@@ -20,7 +20,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        HomeVM home = new ()
+        HomeVM home = new()
         {
             Tipos = _context.Tipos.ToList(),
             Pokemons = _context.Pokemons
@@ -28,28 +28,34 @@ public class HomeController : Controller
             .ThenInclude(pt => pt.Tipo)
             .ToList()
         };
-      
-        return View (home);
+
+        return View(home);
     }
 
     public IActionResult Details(int id)
-    { 
-        
+    {
+
         Pokemon pokemon = _context.Pokemons
-            .Where (p => p.Numero == id)
+            .Where(p => p.Numero == id)
            .Include(p => p.Tipos)
            .ThenInclude(pt => pt.Tipo)
-            .Include (p => p.Regiao)
-            .Include (p => p.Genero)
-            .SingleOrDefault ();
-            DetailsVM details = new ()
-            {
-                Atual = pokemon,
-            };
-    
-        return View (pokemon);
+            .Include(p => p.Regiao)
+            .Include(p => p.Genero)
+            .SingleOrDefault();
+        DetailsVM details = new()
+        {
+            Atual = pokemon,
+            Anterior = _context.Pokemons
+                .OrderByDescending(p => p.Numero)
+                .FirstOrDefault(p =>p.Numero< id),
+            Proximo = _context.Pokemons
+                .OrderBy(p => p.Numero)
+                .FirstOrDefault(p => p.Numero >id) 
+        };
+
+        return View(details);
     }
- 
+
     public IActionResult Privacy()
     {
         return View();
